@@ -168,7 +168,6 @@ Body:
 ## 🏗 Future Improvements
 
 - Chunking for large PDF files  
-- Proper PDF parsing (PyMuPDF / pdfplumber)  
 - Authentication (API key / JWT)  
 - Dockerfile + container deployment  
 - Move vector DB from local ChromaDB → Pinecone / Weaviate  
