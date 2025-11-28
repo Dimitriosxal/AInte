@@ -7,6 +7,7 @@ from .schemas import ChatRequest, QueryRequest
 from .openai_client import chat_completion
 from .rag import upsert_document, query_similar
 from .utils import save_upload_file
+import fitz
 
 load_dotenv()
 app = FastAPI(title="AI Integration - FastAPI RAG Demo")
@@ -34,24 +35,51 @@ async def chat(req: ChatRequest):
     return {"answer": resp}
     
 
+import fitz  # PyMuPDF
+
 @app.post("/upload")
 async def upload(file: UploadFile = File(...)):
+    # 1. Save file locally
     path = await save_upload_file(file)
-
-    # Try to extract text (basic version)
-    try:
-        with open(path, "rb") as f:
-            raw = f.read()
-            try:
-                text = raw.decode("utf-8")
-            except:
-                text = "[binary file uploaded]"
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
     doc_id = os.path.basename(path)
-    upsert_document(doc_id=doc_id, text=text)
-    return {"doc_id": doc_id}
+
+    # 2. Extract text
+    text = ""
+
+    if file.filename.lower().endswith(".pdf"):
+        # PDF extraction
+        try:
+            pdf = fitz.open(path)
+            for page in pdf:
+                text += page.get_text()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"PDF extraction failed: {e}")
+
+    elif file.filename.lower().endswith(".txt"):
+        # TXT extraction
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                text = f.read()
+        except:
+            text = "[could not read .txt file]"
+    else:
+        text = "[unsupported file type]"
+
+    # 3. Validate extracted text
+    if not text.strip():
+        text = "[empty document or unreadable text]"
+
+    # 4. Store into ChromaDB
+    upsert_document(
+        doc_id=doc_id,
+        text=text,
+        metadata={"filename": file.filename}
+    )
+
+    return {
+        "doc_id": doc_id,
+        "text_preview": text[:300]  # send first 300 chars back for debugging
+    }
 
 @app.post("/query")
 async def query(req: QueryRequest):
