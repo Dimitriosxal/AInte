@@ -36,20 +36,18 @@ Simple HTML page for:
 ## 📁 Project Structure
 
 AInte/
-│
-├── app/
-│ ├── main.py # API endpoints & routing
-│ ├── openai_client.py # OpenAI API wrapper
-│ ├── rag.py # RAG logic (ChromaDB + embeddings)
-│ ├── schemas.py # Pydantic models (validation)
-│ ├── utils.py # File upload helpers
-│ └── static/
-│ └── index.html # Minimal frontend demo
-│
-├── .env.example # Environment variables template
-├── requirements.txt # Dependencies
-├── .gitignore # Ignored files
-└── README.md # Documentation
+  app/
+    main.py
+    openai_client.py
+    rag.py
+    schemas.py
+    utils.py
+    static/
+      index.html
+  .env.example
+  requirements.txt
+  .gitignore
+  README.md
 
 
 
