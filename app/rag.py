@@ -45,4 +45,7 @@ def query_similar(query: str, n_results: int = 3):
     """Retrieve semantically similar documents."""
     col = get_collection()
     results = col.query(
-        quer
+        query_texts=[query],
+        n_results=n_results
+    )
+    return results
