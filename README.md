@@ -37,15 +37,15 @@ Simple HTML page for:
 
 AInte/
   app/
-    main.py
-    openai_client.py
-    rag.py
-    schemas.py
-    utils.py
+    main.py               # API endpoints & routing
+    openai_client.py      # OpenAI API wrapper
+    rag.py                # RAG logic (ChromaDB + embeddings)
+    schemas.py            # Pydantic models
+    utils.py              # File upload helpers
     static/
-      index.html
-  .env.example
-  requirements.txt
+      index.html          # Minimal frontend demo
+  .env.example            # Environment variables template
+  requirements.txt        # Dependencies
   .gitignore
   README.md
 
