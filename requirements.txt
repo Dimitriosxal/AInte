@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+openai
+chromadb
+pydantic
+aiofiles
+python-multipart
+tqdm
+requests
