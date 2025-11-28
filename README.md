@@ -32,8 +32,9 @@ Simple HTML page for:
 - RAG queries  
 
 ---
-```
+
 ## 📁 Project Structure
+```
 AInte/
 │
 ├── app/
@@ -53,118 +54,146 @@ AInte/
 ```
 
 
----
-
-INSTALLATION
-
-Clone the repository
+##🔧 Installation
+1. Clone the repository
 git clone https://github.com/YOUR-USERNAME/AInte.git
-
 cd AInte
 
-Create a virtual environment
+2. Create a virtual environment
 python -m venv .venv
-source .venv/bin/activate (Linux/Mac)
-.venv\Scripts\activate (Windows)
+source .venv/bin/activate       # Linux/Mac
+.venv\Scripts\activate          # Windows
 
-Install dependencies
+3. Install dependencies
 pip install -r requirements.txt
 
-Create your environment file
+4. Create your environment file
 cp .env.example .env
+
+
 Fill in your OpenAI API Key inside .env.
 
-RUNNING THE SERVER
-
+##  ▶️ Running the Server
 uvicorn app.main:app --reload
-Open: http://localhost:8000
 
-You will see Chat, Upload, and RAG sections.
 
-PDF TEXT EXTRACTION (NEW FEATURE)
+Then open in browser:
 
-AInte now supports automatic PDF text extraction using PyMuPDF (fitz).
+http://localhost:8000
 
-When a user uploads a PDF:
 
-The server reads the file
+You will see the Chat, Upload, and RAG interface.
 
-Extracts clean text from each page
+##  📄 PDF Text Extraction
 
-Stores the extracted text in ChromaDB
+AInte supports automatic PDF text extraction using PyMuPDF (fitz).
 
-Makes it searchable through RAG queries
+When a PDF is uploaded:
 
-Supported formats:
+The server loads the file
 
-PDF (.pdf) full text extraction
+Extracts readable text from each page
 
-TXT (.txt) plain text
+Stores the text inside ChromaDB
 
-Other files return: "[unsupported file type]"
+Makes it searchable via RAG
 
-This enables true Retrieval-Augmented Generation based on real document content.
+Supported Formats
 
-HOW RAG WORKS
+✔ PDF (.pdf) — full text extraction
 
-RAG improves LLM responses by combining vector search with generative reasoning.
+✔ TXT (.txt) — plain text
 
-Embeddings
-Uploaded documents are converted to embeddings using text-embedding-3-small.
+✘ Others → "unsupported file type"
 
-Vector Storage
-Embeddings and metadata are saved locally in ChromaDB.
+This enables real Retrieval-Augmented Generation based on actual document content.
 
-Semantic Search
-When the user performs a query:
+##  🧠 How RAG Works
+
+RAG (Retrieval-Augmented Generation) improves LLM responses using vector search + generation.
+
+1. Embeddings
+
+Documents are embedded using:
+
+text-embedding-3-small
+
+2. Vector Database
+
+Embeddings + metadata are stored in ChromaDB.
+
+3. Semantic Search
+
+When the user asks a question:
 
 The question is embedded
 
-ChromaDB finds the most similar document chunks
+ChromaDB returns the most similar document chunks
 
-These chunks become context for the model
+These chunks become context
 
-LLM Response
-The system sends this prompt:
+4. LLM Response
+
+The system generates a prompt like:
 
 Use the following context to answer:
+
 [matched document chunks]
+
 Question: <user query>
 
-The model uses both the context + its own knowledge for accurate answers.
 
-API USAGE
+The model answers using both context + world knowledge.
 
-CHAT
+##  🧠 API Usage
+Chat
 POST /chat
-JSON body:
-prompt: "Your message here"
+{
+  "prompt": "Your message here"
+}
 
-UPLOAD DOCUMENT
+Upload Document
 POST /upload
-Multipart form-data:
 file: <your_file>
 
-RAG QUERY
+RAG Query
 POST /query
-JSON body:
-query: "Your question"
-top_k: 3
+{
+  "query": "Your question",
+  "top_k": 3
+}
 
-FUTURE IMPROVEMENTS
+##  🏗 Future Improvements
 
 Chunking for large PDF files
 
-Better PDF parsing (tables, layout preservation)
+More advanced PDF parsing (tables, layout)
 
 Authentication (API key / JWT)
 
-Docker deployment
+Docker container deployment
 
-Move vector DB to Pinecone / Weaviate
+Move from local ChromaDB → Pinecone / Weaviate
 
-Replace HTML frontend with React or Next.js
+Replace HTML interface with React or Next.js
 
 Retry logic for OpenAI rate limits
 
-Add backend tests with pytest
+Unit tests with pytest
+
+
+##  🎯 Summary
+
+AInte is a clean, modern, production-style AI integration template showing:
+
+FastAPI backend
+
+OpenAI models
+
+Vector database
+
+RAG flow
+
+PDF extraction
+
+Frontend interface
