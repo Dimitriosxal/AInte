@@ -14,7 +14,7 @@ def chat_completion(messages, model=None, max_tokens=500, temperature=0.2):
     model=model,
     messages=messages,
     temperature=temperature
-)
+
     )
     return response
 
