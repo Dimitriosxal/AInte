@@ -1,7 +1,7 @@
 # AInte – AI Integration with FastAPI, OpenAI & RAG
 
 AInte is a complete demo project that showcases how to integrate  
-LLM models, embeddings, and RAG
+LLM models, embeddings, and RAG  
 into a FastAPI backend.
 
 This project includes:
@@ -17,22 +17,19 @@ This project includes:
 ## 🚀 Features
 
 ### **1. Chat Endpoint**
-A simple API endpoint that communicates with OpenAI’s Chat models  
-(default: `gpt-4o-mini`).
+Communicates directly with OpenAI Chat models (default: `gpt-4o-mini`).
 
 ### **2. File Upload + Embeddings**
-Users can upload documents which are then embedded and stored  
-inside ChromaDB along with metadata.
+Users upload documents → embeddings are generated → stored in ChromaDB.
 
 ### **3. RAG Query**
-Ask a question → semantic search runs → the top-matched context is sent  
-to the LLM for an enriched and accurate answer.
+Semantic search retrieves relevant chunks → sent to the LLM for more accurate responses.
 
 ### **4. Frontend Demo**
-A very small HTML interface used for testing:
-- Chat
-- Upload
-- Ask (RAG)
+Simple HTML page for:
+- Chat  
+- Upload  
+- RAG queries  
 
 ---
 
@@ -55,58 +52,38 @@ AInte/
 └── README.md # Documentation
 
 
+
 ---
 
-## 🔧 Installation
+INSTALLATION
 
-### 1. Clone the repository
-```bash
+Clone the repository
 git clone https://github.com/YOUR-USERNAME/AInte.git
+
 cd AInte
-```
 
-  2. Create a virtual environment
-```
+Create a virtual environment
 python -m venv .venv
-source .venv/bin/activate   # Linux/Mac
-.venv\Scripts\activate      # Windows
-```
-  3. Install Dependecies
-```
+source .venv/bin/activate (Linux/Mac)
+.venv\Scripts\activate (Windows)
+
+Install dependencies
 pip install -r requirements.txt
-```
-  4. Create your environment file
-```
+
+Create your environment file
 cp .env.example .env
-```
-->Fill in your OpenAI API Key inside .env.
+Fill in your OpenAI API Key inside .env.
 
----
+RUNNING THE SERVER
 
-## ▶️ Running the Server
-
-```
 uvicorn app.main:app --reload
-```
+Open: http://localhost:8000
 
-Then open your browser at:
+You will see Chat, Upload, and RAG sections.
 
-```
-http://localhost:8000
-```
+PDF TEXT EXTRACTION (NEW FEATURE)
 
-You will see:
-
-- Chat section  
-- Upload section  
-- RAG Query section  
-
-All inside the simple HTML interface.
-
----
-✅📄 PDF Text Extraction (New Feature)
- 
-AInte now supports automatic text extraction from PDF documents using PyMuPDF (fitz).
+AInte now supports automatic PDF text extraction using PyMuPDF (fitz).
 
 When a user uploads a PDF:
 
@@ -114,64 +91,80 @@ The server reads the file
 
 Extracts clean text from each page
 
-Stores the extracted content inside ChromaDB
+Stores the extracted text in ChromaDB
 
-Makes it searchable via RAG queries
+Makes it searchable through RAG queries
 
 Supported formats:
 
-✔ .pdf — full text extraction
+PDF (.pdf) full text extraction
 
-✔ .txt — plain text read
+TXT (.txt) plain text
 
-✘ Other binary files return: "[unsupported file type]"
+Other files return: "[unsupported file type]"
 
-This enables real Retrieval-Augmented Generation (RAG), allowing the system to give accurate answers based on the actual content of the uploaded PDF.
+This enables true Retrieval-Augmented Generation based on real document content.
 
-## 🧠 API Usage
+HOW RAG WORKS
 
-### **Chat**
-POST → `/chat`
+RAG improves LLM responses by combining vector search with generative reasoning.
 
-Body:
-```
-{
-  "prompt": "Your message here"
-}
-```
+Embeddings
+Uploaded documents are converted to embeddings using text-embedding-3-small.
 
----
+Vector Storage
+Embeddings and metadata are saved locally in ChromaDB.
 
-### **Upload Document**
-POST → `/upload`
+Semantic Search
+When the user performs a query:
 
+The question is embedded
+
+ChromaDB finds the most similar document chunks
+
+These chunks become context for the model
+
+LLM Response
+The system sends this prompt:
+
+Use the following context to answer:
+[matched document chunks]
+Question: <user query>
+
+The model uses both the context + its own knowledge for accurate answers.
+
+API USAGE
+
+CHAT
+POST /chat
+JSON body:
+prompt: "Your message here"
+
+UPLOAD DOCUMENT
+POST /upload
 Multipart form-data:
-```
 file: <your_file>
-```
 
----
+RAG QUERY
+POST /query
+JSON body:
+query: "Your question"
+top_k: 3
 
-### **RAG Query**
-POST → `/query`
+FUTURE IMPROVEMENTS
 
-Body:
-```
-{
-  "query": "Your question",
-  "top_k": 3
-}
-```
+Chunking for large PDF files
 
----
+Better PDF parsing (tables, layout preservation)
 
-## 🏗 Future Improvements
+Authentication (API key / JWT)
 
-- Chunking for large PDF files  
-- Authentication (API key / JWT)  
-- Dockerfile + container deployment  
-- Move vector DB from local ChromaDB → Pinecone / Weaviate  
-- Replace HTML with React or Next.js frontend  
-- Add retry logic for OpenAI rate limits  
-- Add tests with pytest  
+Docker deployment
 
+Move vector DB to Pinecone / Weaviate
+
+Replace HTML frontend with React or Next.js
+
+Retry logic for OpenAI rate limits
+
+Add backend tests with pytest
