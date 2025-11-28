@@ -29,11 +29,10 @@ async def chat(req: ChatRequest):
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": req.prompt}
     ]
+
     resp = chat_completion(messages)
-    try:
-        return {"answer": resp["choices"][0]["message"]["content"]}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return {"answer": resp}
+    
 
 @app.post("/upload")
 async def upload(file: UploadFile = File(...)):
