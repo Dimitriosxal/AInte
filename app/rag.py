@@ -7,8 +7,12 @@ from chromadb.utils import embedding_functions
 DB_DIR = os.getenv("CHROMA_DB_DIR", "./chroma_db")
 
 # Initialize ChromaDB client
-client = Client(Settings(chroma_db_impl="duckdb+parquet",
-                         persist_directory=DB_DIR))
+client = Client(
+    settings=Settings(
+        persist_directory=DB_DIR,
+        allow_reset=True
+    )
+)
 
 # Embedding function using OpenAI
 emb_func = embedding_functions.OpenAIEmbeddingFunction(
