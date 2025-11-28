@@ -42,7 +42,6 @@ def upsert_document(doc_id: str, text: str, metadata: dict = None):
         documents=[text],
         metadatas=[metadata or {"source": "upload"}]
     )
-    client.persist()
 
 
 def query_similar(query: str, n_results: int = 3):
