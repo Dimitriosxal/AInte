@@ -104,6 +104,29 @@ You will see:
 All inside the simple HTML interface.
 
 ---
+✅📄 PDF Text Extraction (New Feature)
+ 
+AInte now supports automatic text extraction from PDF documents using PyMuPDF (fitz).
+
+When a user uploads a PDF:
+
+The server reads the file
+
+Extracts clean text from each page
+
+Stores the extracted content inside ChromaDB
+
+Makes it searchable via RAG queries
+
+Supported formats:
+
+✔ .pdf — full text extraction
+
+✔ .txt — plain text read
+
+✘ Other binary files return: "[unsupported file type]"
+
+This enables real Retrieval-Augmented Generation (RAG), allowing the system to give accurate answers based on the actual content of the uploaded PDF.
 
 ## 🧠 API Usage
 
