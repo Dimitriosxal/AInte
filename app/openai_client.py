@@ -1,29 +1,39 @@
 import os
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 
+# Load .env variables
 load_dotenv()
 
-OPENAI_KEY = os.getenv("OPENAI_API_KEY")
-openai.api_key = OPENAI_KEY
+# Create OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def chat_completion(messages, model=None, max_tokens=500, temperature=0.2):
+def chat_completion(messages, model=None, temperature=0.2):
+    """
+    Chat completion using the new OpenAI client API.
+    """
     model = model or os.getenv("MODEL_CHAT", "gpt-4o-mini")
 
     response = client.chat.completions.create(
-    model=model,
-    messages=messages,
-    temperature=temperature
-
+        model=model,
+        messages=messages,
+        temperature=temperature
     )
-    return response
+
+    return response.choices[0].message["content"]
+
 
 def get_embeddings(texts, model=None):
+    """
+    Embedding generation using the new OpenAI client API.
+    """
     model = model or os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 
-    response = openai.Embedding.create(
+    response = client.embeddings.create(
         model=model,
         input=texts
     )
-    vectors = [item["embedding"] for item in response["data"]]
+
+    # extract vectors
+    vectors = [item.embedding for item in response.data]
     return vectors
