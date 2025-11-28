@@ -10,11 +10,11 @@ openai.api_key = OPENAI_KEY
 def chat_completion(messages, model=None, max_tokens=500, temperature=0.2):
     model = model or os.getenv("MODEL_CHAT", "gpt-4o-mini")
 
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=messages,
-        max_tokens=max_tokens,
-        temperature=temperature
+    response = client.chat.completions.create(
+    model=model,
+    messages=messages,
+    temperature=temperature
+)
     )
     return response
 
