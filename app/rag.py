@@ -40,7 +40,7 @@ def upsert_document(doc_id: str, text: str, metadata: dict = None):
     col.upsert(
         ids=[doc_id],
         documents=[text],
-        metadatas=[metadata or {}]
+        metadatas=[metadata or {"source": "upload"}]
     )
     client.persist()
 
