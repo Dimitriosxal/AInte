@@ -20,8 +20,7 @@ def chat_completion(messages, model=None, temperature=0.2):
         temperature=temperature
     )
 
-    return response.choices[0].message["content"]
-
+    return response.choices[0].message.content
 
 def get_embeddings(texts, model=None):
     """
