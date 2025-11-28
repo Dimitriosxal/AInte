@@ -55,17 +55,22 @@ async def upload(file: UploadFile = File(...)):
 
 @app.post("/query")
 async def query(req: QueryRequest):
-    results = query_similar(req.query, n_results=req.top_k)
-    docs = results.get("documents", [[]])[0]
-    metadatas = results.get("metadatas", [[]])[0]
+    results = query_similar(req.query, req.top_k)
 
-    context = "\n\n---\n\n".join(
-        [f"SOURCE: {md.get('source','-')}\n{d}" for d, md in zip(docs, metadatas)]
-    )
+    # Extract matched text chunks
+    contexts = results.get("documents", [[]])[0]
 
-    prompt = f"Use this context to answer the question.\n\nContext:\n{context}\n\nQuestion: {req.query}"
+    # Build RAG prompt
+    prompt = f"Use the following information to answer the question:\n\n{contexts}\n\nQuestion: {req.query}"
 
-    resp = chat_completion(
-        [{"role": "user", "content": prompt}]
-    )
-    answer
+    messages = [
+        {"role": "system", "content": "You are a RAG assistant."},
+        {"role": "user", "content": prompt}
+    ]
+
+    rag_answer = chat_completion(messages)
+
+    return {
+        "matches": results,
+        "answer": rag_answer
+    }
